@@ -15,6 +15,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.know_my_city.ui.components.ProfileScreen
 
+import com.example.know_my_city.ui.components.fotosCiudad
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,10 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("perfil") {
                             ProfileScreen()
+                        }
+
+                        composable("fotos"){
+                            fotosCiudad()
                         }
                     }
                 }

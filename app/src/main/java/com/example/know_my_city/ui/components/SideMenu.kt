@@ -17,12 +17,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 //importar libraria de material design
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.navigation.NavHostController
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 
+import androidx.compose.material.icons.filled.PhotoLibrary
 
 @Composable
 fun SideMenu(
@@ -67,6 +69,24 @@ fun SideMenu(
                 )
                 Text(
                     text = "Perfil",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+
+            //Opcions del menú fotos
+            Button(
+                onClick = { navController.navigate("fotos") },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PhotoLibrary,
+                    contentDescription = "Fotos"
+                )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = "Fotos",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
