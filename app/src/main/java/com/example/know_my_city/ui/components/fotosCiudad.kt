@@ -66,8 +66,8 @@ fun fotosCiudad() {
             factory = { ctx ->
                 Configuration.getInstance().userAgentValue = ctx.packageName //Aquí se configura el user agent para que la API de OpenStreetMap funcione
                 MapView(ctx).apply { //Aquí se configura el mapa
-                    setTileSource(TileSourceFactory.MAPNIK) //Aquí se configura el tile source
-                    setMultiTouchControls(true) //Aquí se configura el control multi-touch
+                    setTileSource(TileSourceFactory.MAPNIK) //Aquí se configura el tile source para que se muestre el mapa
+                    setMultiTouchControls(true) //Aquí se configura el control multi-touch para que se pueda hacer zoom con dos dedos
                     val bogota = GeoPoint(4.7110, -74.0721) //Aquí se configura la ubicación de Bogotá
                     controller.setZoom(12.0) //Aquí se configura el zoom
                     controller.setCenter(bogota) //Aquí se configura el centro del mapa

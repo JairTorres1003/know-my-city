@@ -56,7 +56,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    //librerias de navegacion
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    //libreria de iconos
     implementation("androidx.compose.material:material-icons-extended")
 
     //librerias de open street map permiten mostrar mapas offline
