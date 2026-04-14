@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
@@ -24,7 +25,13 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
-// Lista de fotos de Bogotá desde Wikimedia (gratuitas y sin API key)
+// Nuevos imports que necesitas agregar arriba
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.example.know_my_city.ui.ClimaViewModel
+
+// Lista de fotos de Bogotá (gratuitas)
 val fotosBogota = listOf(
     "https://images.unsplash.com/photo-1720067392108-89b9485aa090?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://plus.unsplash.com/premium_photo-1697730030651-3a7aa391b9d6?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -34,9 +41,10 @@ val fotosBogota = listOf(
 )
 
 @Composable
-fun fotosCiudad() {
+fun fotosCiudad( weatherViewModel: ClimaViewModel = viewModel()) {
 
-    val context = LocalContext.current
+    val context = LocalContext.current // contexto de la aplicación (necesario para cargar imágenes)
+    val weatherData by weatherViewModel.clima.collectAsState() // datos del clima desde el ViewModel
 
     // verticalScroll permite hacer scroll en toda la pantalla
     Column(
@@ -55,6 +63,31 @@ fun fotosCiudad() {
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 20.dp)
         )
+
+        // TARJETA DEL CLIMA
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                if (weatherData != null) {
+                    Text(
+                        text = "🌡️ ${weatherData!!.current_weather.temperature}°C  " +
+                                "💨 ${weatherData!!.current_weather.windspeed} km/h",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                } else {
+                    Text(text = "Cargando clima...")
+                }
+            }
+        }
 
         // --- MAPA ---
         AndroidView(

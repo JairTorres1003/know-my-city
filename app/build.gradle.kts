@@ -65,4 +65,21 @@ dependencies {
     implementation("org.osmdroid:osmdroid-android:6.1.18")
     //libreria para cargar imagenes de internet
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+
+    // Las siguienetes dependencias son para la API de OpenStreetMap - la cual nos permite mostrar mapas offline
+    // Retrofit (para llamadas HTTP)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coroutines (para no bloquear la UI)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+    // ViewModel + LiveData + viewModelScope
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+
 }
