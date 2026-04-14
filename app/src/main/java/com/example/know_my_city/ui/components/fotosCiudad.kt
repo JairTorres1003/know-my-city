@@ -1,37 +1,39 @@
 package com.example.know_my_city.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.know_my_city.ui.ClimaViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
-// Nuevos imports que necesitas agregar arriba
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import com.example.know_my_city.ui.ClimaViewModel
-
-// Lista de fotos de Bogotá (gratuitas)
+// Lista de fotos de Bogotá (gratuitas de Unsplash)
 val fotosBogota = listOf(
     "https://images.unsplash.com/photo-1720067392108-89b9485aa090?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://plus.unsplash.com/premium_photo-1697730030651-3a7aa391b9d6?q=80&w=688&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -41,104 +43,205 @@ val fotosBogota = listOf(
 )
 
 @Composable
-fun fotosCiudad( weatherViewModel: ClimaViewModel = viewModel()) {
+fun fotosCiudad(
+    modeloClima: ClimaViewModel = viewModel()
+) {
+    val contexto = LocalContext.current
+    val datosClima by modeloClima.clima.collectAsState()
 
-    val context = LocalContext.current // contexto de la aplicación (necesario para cargar imágenes)
-    val weatherData by weatherViewModel.clima.collectAsState() // datos del clima desde el ViewModel
-
-    // verticalScroll permite hacer scroll en toda la pantalla
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+            .padding(bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
 
-        // --- TÍTULO ---
-        Text(
-            text = "Bogotá, Colombia",
-            style = MaterialTheme.typography.headlineSmall,
+        // ── Encabezado con degradado y título ──
+        Box(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 20.dp)
-        )
+                .fillMaxWidth()
+                .height(180.dp)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1A237E), // azul oscuro arriba
+                            Color(0xFF0277BD)  // azul cielo abajo
+                        )
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Ícono de ubicación
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(32.dp)
+                )
 
-        // TARJETA DEL CLIMA
+                // Nombre de la ciudad
+                Text(
+                    text = "Bogotá, Colombia",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+
+                // Altitud como dato adicional
+                Text(
+                    text = "2.600 m sobre el nivel del mar",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // ── Tarjeta del clima con dos datos ──
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(20.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            )
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                if (weatherData != null) {
-                    Text(
-                        text = "🌡️ ${weatherData!!.current_weather.temperature}°C  " +
-                                "💨 ${weatherData!!.current_weather.windspeed} km/h",
-                        style = MaterialTheme.typography.titleMedium
+            if (datosClima != null) {
+                // Fila con temperatura y viento
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Bloque de temperatura
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "🌡️", fontSize = 28.sp)
+                        Text(
+                            text = "${datosClima!!.current_weather.temperature}°C",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = "Temperatura",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        )
+                    }
+
+                    // Divisor vertical
+                    Divider(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(1.dp),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.3f)
                     )
-                } else {
-                    Text(text = "Cargando clima...")
+
+                    // Bloque de viento
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(text = "💨", fontSize = 28.sp)
+                        Text(
+                            text = "${datosClima!!.current_weather.windspeed} km/h",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = "Viento",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+            } else {
+                // Mensaje mientras carga el clima
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "⏳ Cargando clima...",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
         }
 
-        // --- MAPA ---
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // ── Mapa de Bogotá ──
+        Text(
+            text = "📍 Ubicación",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+        )
+
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(220.dp)
                 .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp)), // bordes redondeados al mapa
+                .clip(RoundedCornerShape(20.dp)), // bordes redondeados al mapa
             factory = { ctx ->
-                Configuration.getInstance().userAgentValue = ctx.packageName //Aquí se configura el user agent para que la API de OpenStreetMap funcione
-                MapView(ctx).apply { //Aquí se configura el mapa
-                    setTileSource(TileSourceFactory.MAPNIK) //Aquí se configura el tile source para que se muestre el mapa
-                    setMultiTouchControls(true) //Aquí se configura el control multi-touch para que se pueda hacer zoom con dos dedos
-                    val bogota = GeoPoint(4.7110, -74.0721) //Aquí se configura la ubicación de Bogotá
-                    controller.setZoom(12.0) //Aquí se configura el zoom
-                    controller.setCenter(bogota) //Aquí se configura el centro del mapa
-                    val marker = Marker(this) //Aquí se configura el marcador
-                    marker.position = bogota //Aquí se configura la posición del marcador
-                    marker.title = "Bogotá, Colombia" //Aquí se configura el título del marcador
-                    marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM) //Aquí se configura el anclaje del marcador
-                    overlays.add(marker) //Aquí se añade el marcador al mapa
+                // Configura el user agent para que OpenStreetMap funcione
+                Configuration.getInstance().userAgentValue = ctx.packageName
+                MapView(ctx).apply {
+                    setTileSource(TileSourceFactory.MAPNIK) // tipo de mapa estándar
+                    setMultiTouchControls(true)             // zoom con dos dedos
+                    val bogota = GeoPoint(4.7110, -74.0721) // coordenadas de Bogotá
+                    controller.setZoom(12.0)
+                    controller.setCenter(bogota)
+                    // Marcador sobre Bogotá
+                    val marcador = Marker(this)
+                    marcador.position = bogota
+                    marcador.title = "Bogotá, Colombia"
+                    marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                    overlays.add(marcador)
                 }
             }
         )
 
-        // --- SECCIÓN DE FOTOS ---
+        // ── Galería de fotos ──
         Text(
-            text = "Galería de fotos",
+            text = "🖼️ Galería de fotos",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
-        // LazyRow muestra las fotos en fila horizontal con scroll
+        // Fila horizontal con scroll de fotos
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(fotosBogota) { url ->
-                // Cada foto en una card con bordes redondeados
+                // Cada foto en una card con sombra y bordes redondeados
                 Card(
                     modifier = Modifier
                         .width(240.dp)
                         .height(160.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    shape = RoundedCornerShape(20.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
-                    // AsyncImage carga la imagen desde la URL automáticamente
+                    // AsyncImage carga la imagen desde la URL con animación suave
                     AsyncImage(
-                        model = ImageRequest.Builder(context)
-                            .data(url)          // URL de la imagen
-                            .crossfade(true)    // animación suave al cargar
+                        model = ImageRequest.Builder(contexto)
+                            .data(url)
+                            .crossfade(true) // transición suave al cargar
                             .build(),
                         contentDescription = "Foto de Bogotá",
                         contentScale = ContentScale.Crop, // recorta para llenar la card
@@ -148,26 +251,32 @@ fun fotosCiudad( weatherViewModel: ClimaViewModel = viewModel()) {
             }
         }
 
-        // --- DESCRIPCIÓN DE BOGOTÁ ---
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // ── Descripción de Bogotá ──
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(16.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            shape = RoundedCornerShape(20.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(
-                // color suave de fondo para la descripción
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             )
         ) {
             Column(
                 modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                // Título de la sección
                 Text(
-                    text = "Sobre Bogotá",
+                    text = "🏙️ Sobre Bogotá",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
+
+                // Descripción de la ciudad
                 Text(
                     text = "Bogotá es la vibrante capital de Colombia, " +
                             "ubicada a 2.600 metros sobre el nivel del mar. " +
@@ -177,9 +286,9 @@ fun fotosCiudad( weatherViewModel: ClimaViewModel = viewModel()) {
                             "y una cultura que la convierte en el corazón cultural " +
                             "de Latinoamérica.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    textAlign = TextAlign.Justify, // texto justificado
-                    lineHeight = MaterialTheme.typography.bodyMedium.lineHeight
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    textAlign = TextAlign.Justify,
+                    lineHeight = 22.sp
                 )
             }
         }
