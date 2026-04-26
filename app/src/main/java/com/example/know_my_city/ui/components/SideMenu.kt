@@ -1,7 +1,5 @@
 package com.example.know_my_city.ui.components
 
-//importar libraria de material design
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +27,8 @@ import androidx.navigation.NavHostController
 @Composable
 fun SideMenu(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    onOptionClick: () -> Unit = {}
 ) {
     val backgroundDarkBlue = androidx.compose.ui.graphics.Color(0xFF1A237E)
     val fontWhite = androidx.compose.ui.graphics.Color.White
@@ -51,7 +50,9 @@ fun SideMenu(
                 style = MaterialTheme.typography.titleMedium,
                 color = fontWhite,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp)
             )
 
             val btnStyle = ButtonDefaults.buttonColors(
@@ -61,7 +62,10 @@ fun SideMenu(
 
             //Opcions del menú Perfil
             Button(
-                onClick = { navController.navigate("perfil") },
+                onClick = {
+                    navController.navigate("perfil") { launchSingleTop = true }
+                    onOptionClick()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
@@ -69,23 +73,20 @@ fun SideMenu(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Perfil"
                 )
-                Spacer(
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
-
+                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
                     text = "Perfil",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             //Opcions del menú fotos
             Button(
-                onClick = { navController.navigate("fotos") },
+                onClick = {
+                    navController.navigate("fotos") { launchSingleTop = true }
+                    onOptionClick()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
@@ -93,21 +94,20 @@ fun SideMenu(
                     imageVector = Icons.Default.PhotoLibrary,
                     contentDescription = "Fotos"
                 )
-                Spacer(
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
+                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
                     text = "Fotos",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             // Opciones del menú videos
             Button(
-                onClick = { navController.navigate("videos") },
+                onClick = {
+                    navController.navigate("videos") { launchSingleTop = true }
+                    onOptionClick()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
@@ -115,21 +115,20 @@ fun SideMenu(
                     imageVector = Icons.Default.VideoLibrary,
                     contentDescription = "Videos"
                 )
-                Spacer(
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
+                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
                     text = "Videos",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             // Opciones del menú Navegador
             Button(
-                onClick = { navController.navigate("navegador") },
+                onClick = {
+                    navController.navigate("navegador") { launchSingleTop = true }
+                    onOptionClick()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
@@ -137,21 +136,20 @@ fun SideMenu(
                     imageVector = Icons.Default.Web,
                     contentDescription = "Navegador"
                 )
-                Spacer(
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
+                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
                     text = "Navegador",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
             }
 
             // Opciones del menú Otros
             Button(
-                onClick = { navController.navigate("otros") },
+                onClick = {
+                    navController.navigate("otros") { launchSingleTop = true }
+                    onOptionClick()
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
@@ -159,18 +157,13 @@ fun SideMenu(
                     imageVector = Icons.AutoMirrored.Filled.Help,
                     contentDescription = "Otros"
                 )
-                Spacer(
-                    modifier = Modifier.padding(horizontal = 6.dp)
-                )
+                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
                     text = "Otros",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium
                 )
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
             }
-
         }
     }
 }

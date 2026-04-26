@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
@@ -34,7 +33,6 @@ val datosCuriosos = listOf(
 
 @Composable
 fun DynamicContent(
-    onMenuToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // ── ViewModel del clima ──
@@ -73,54 +71,15 @@ fun DynamicContent(
             .fillMaxSize()
             .background(degradadoFondo) // fondo degradado animado
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-
-            // ── Barra superior con botón de menú y título ──
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = Color.Transparent,
-                shadowElevation = 0.dp
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier.padding(24.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    // Botón hamburguesa para abrir el menú lateral
-                    IconButton(
-                        onClick = onMenuToggle,
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Abrir menú",
-                            tint = Color.White
-                        )
-                    }
-
-                    // Título de la app centrado en la barra
-                    Text(
-                        text = "Know My City",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-            }
-
-            // ── Contenido principal centrado ──
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    modifier = Modifier.padding(24.dp)
-                ) {
 
                     // Ícono circular decorativo de ubicación
                     Box(
@@ -266,28 +225,27 @@ fun DynamicContent(
                         }
                     }
 
-                    // Chip decorativo con la ubicación
-                    Surface(
-                        shape = RoundedCornerShape(50.dp),
-                        color = Color.White.copy(alpha = 0.2f)
+                // Chip decorativo con la ubicación
+                Surface(
+                    shape = RoundedCornerShape(50.dp),
+                    color = Color.White.copy(alpha = 0.2f)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "Bogotá, Colombia",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = Color.White
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            text = "Bogotá, Colombia",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color.White
+                        )
                     }
                 }
             }
