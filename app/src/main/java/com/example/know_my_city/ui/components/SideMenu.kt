@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material.icons.filled.Web
@@ -63,19 +63,19 @@ fun SideMenu(
             //Opcions del menú Perfil
             Button(
                 onClick = {
-                    navController.navigate("perfil") { launchSingleTop = true }
+                    navController.navigate("main") { launchSingleTop = true }
                     onOptionClick()
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = btnStyle
             ) {
                 Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Perfil"
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "Ciudad"
                 )
                 Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Text(
-                    text = "Perfil",
+                    text = "Ciudad",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.weight(1f))

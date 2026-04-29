@@ -28,7 +28,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.know_my_city.ui.components.DynamicContent
 import com.example.know_my_city.ui.components.NavegadorScreen
 import com.example.know_my_city.ui.components.OtrosScreen
-import com.example.know_my_city.ui.components.ProfileScreen
 import com.example.know_my_city.ui.components.SideMenu
 import com.example.know_my_city.ui.components.SplashScreen
 import com.example.know_my_city.ui.components.VideosScreen
@@ -69,7 +68,6 @@ class MainActivity : ComponentActivity() {
                             composable("main") {
                                 DynamicContent(modifier = Modifier.fillMaxSize())
                             }
-                            composable("perfil") { ProfileScreen() }
                             composable("fotos") { fotosCiudad() }
                             composable("videos") { VideosScreen() }
                             composable("navegador") { NavegadorScreen() }
